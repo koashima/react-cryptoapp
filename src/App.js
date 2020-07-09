@@ -25,16 +25,19 @@ function App() {
 
   return (
     <div className="App">
-      <input
-        onChange={(e) => updateInputValues('limit', e.target.value)}
-        placeholder="limit"
-      />
-      <input
-        onChange={(e) => updateInputValues('start', e.target.value)}
-        placeholder="start"
-      />
-      <button onClick={fetchCoins}>Fetch Coins</button>
-
+      <br/>
+      <h1>CRYPTOAPP</h1>
+      <div className="query-inputs">
+        <input
+          onChange={(e) => updateInputValues('limit', e.target.value)}
+          placeholder="limit"
+        />
+        <input
+          onChange={(e) => updateInputValues('start', e.target.value)}
+          placeholder="start"
+        />
+        <button onClick={fetchCoins}>Fetch Coins</button>
+      </div>
       {coins.map((coin, index) => (
         <div key={index}>
           <h2>
