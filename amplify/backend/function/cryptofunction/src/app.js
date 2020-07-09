@@ -6,9 +6,6 @@ or in the "license" file accompanying this file. This file is distributed on an 
 See the License for the specific language governing permissions and limitations under the License.
 */
 
-
-
-
 var express = require('express')
 var bodyParser = require('body-parser')
 var awsServerlessExpressMiddleware = require('aws-serverless-express/middleware')
@@ -25,19 +22,23 @@ app.use(function(req, res, next) {
   next()
 });
 
-
+const axios = require('axios')
 /**********************
  * Example get method *
  **********************/
 app.get('/coins', function(req, res) {
-  const coins = [
-    { name: 'Bitcoin', symbol: 'BTC', price_usd: "10000" },
-    { name: 'Ethereum', symbol: 'ETH', price_usd: "400" },
-    { name: 'Litecoin', symbol: 'LTC', price_usd: "150" }
-  ]
-  res.json({
-    coins
-  })
+  let apiUrl = `https://api.coinlore.com/api/tickers?start=0&limit=10`
+
+  if(req.apiGateway && req.apiGateway.event.queryStringParameters) {
+    const { start = 0, limit = 10 } = req.apiGateway.event.queryStringParameters
+    apiUrl = `https://api.coinlore.com/api/tickers/?start=${start}&limit=${limit}`
+  }
+
+  axios.get(apiUrl)
+    .then(response => {
+      res.json({ coins: response.data.data })
+    })
+    .catch(err => res.json ({ error: err }))
 })
 
 app.get('/item', function(req, res) {
